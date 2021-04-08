@@ -1,0 +1,110 @@
+name: build-clang
+on: [push]
+jobs:
+  build-clang:
+    runs-on: windows-latest
+    steps:
+      # Checkout the engine
+      - uses: actions/checkout@v2
+        with:
+          repository: epicgames/unrealengine
+          ref: 4.26.1-release
+          path: UnrealEngine
+
+      # Checkout the plugin          
+      - uses: actions/checkout@v2
+        with:
+          repository: mothcocoon/flowgraph
+          path: UnrealEngine/Game/Plugins/Flow
+
+      # Create a dummy unreal project to compile
+      - uses: DamianReeves/write-file-action
+        with:
+          path: UnrealEngine/Game/Game.uproject
+          write-mode: overwrite
+          contents: |
+            {
+              "FileVersion": 3,
+              "EngineAssociation": "{C075DDC5-40B4-D69B-D880-B789B2FAACEB}",
+              "Category": "",
+              "Description": "",
+              "Modules": [
+                {
+                  "Name": "Flow",
+                  "Type": "Runtime",
+                  "LoadingPhase": "Default"
+                },
+                {
+                  "Name": "FlowEditor",
+                  "Type": "Editor",
+                  "LoadingPhase": "Default"
+                }
+              ],
+              "Plugins": [
+                {
+                  "Name": "Flow",
+                  "Enabled": true
+                }
+              ]
+            }
+
+      # Create a dummy target to compile
+      - uses: DamianReeves/write-file-action
+        with:
+          path: UnrealEngine/Game/Source/Game.Target.cs
+          write-mode: overwrite
+          contents: |
+            using UnrealBuildTool;
+
+            public class GameTarget : TargetRules
+            {
+                public GameTarget(TargetInfo Target) : base(Target)
+                {
+                    Type = TargetType.Game;
+                    ExtraModuleNames.Add("Game");
+                }
+            }
+
+      # Create a dummy game module build file
+      - uses: DamianReeves/write-file-action
+        with:
+          path: UnrealEngine/Game/Source/Game/Game.Build.cs
+          write-mode: overwrite
+          contents: |
+            using UnrealBuildTool;
+
+            public class Game : ModuleRules
+            {
+                public Game(ReadOnlyTargetRules Target) : base(Target)
+                {
+                    PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
+                    PublicDependencyModuleNames.AddRange(
+                        new[]
+                        {
+                            "Core",
+                            "CoreUObject",
+                            "Engine",
+                            "Flow",
+                        }
+                    );
+                }
+            }
+
+      # Create a dummy game module to compile
+       - uses: DamianReeves/write-file-action
+         with:
+          path: UnrealEngine/Game/Source/Game/Game.cpp
+          write-mode: overwrite
+          contents: |
+            #include "Modules/ModuleManager.h"
+
+            IMPLEMENT_PRIMARY_GAME_MODULE(FDefaultGameModuleImpl, Game, "Game");
+
+      # Invoke unreal automation tool to build the editor
+      run: |
+        UnrealEngine/Engine/Build/BatchFiles/RunUAT.bat ^
+          BuildCookRun ^
+          -Project="Game"
+          -Config="Development"
+          
