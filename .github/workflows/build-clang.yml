@@ -18,7 +18,7 @@ jobs:
           path: UnrealEngine/Game/Plugins/Flow
 
       # Create a dummy unreal project to compile
-      - uses: DamianReeves/write-file-action
+      - uses: DamianReeves/write-file-action@v1.0
         with:
           path: UnrealEngine/Game/Game.uproject
           write-mode: overwrite
@@ -49,7 +49,7 @@ jobs:
             }
 
       # Create a dummy target to compile
-      - uses: DamianReeves/write-file-action
+      - uses: DamianReeves/write-file-action@v1.0
         with:
           path: UnrealEngine/Game/Source/Game.Target.cs
           write-mode: overwrite
@@ -66,7 +66,7 @@ jobs:
             }
 
       # Create a dummy game module build file
-      - uses: DamianReeves/write-file-action
+      - uses: DamianReeves/write-file-action@v1.0
         with:
           path: UnrealEngine/Game/Source/Game/Game.Build.cs
           write-mode: overwrite
@@ -92,7 +92,7 @@ jobs:
             }
 
       # Create a dummy game module to compile
-      - uses: DamianReeves/write-file-action
+      - uses: DamianReeves/write-file-action@v1.0
         with:
           path: UnrealEngine/Game/Source/Game/Game.cpp
           write-mode: overwrite
