@@ -102,7 +102,7 @@ jobs:
             IMPLEMENT_PRIMARY_GAME_MODULE(FDefaultGameModuleImpl, Game, "Game");
 
       # Invoke unreal automation tool to build the editor
-      run: |
+      - run: |
         UnrealEngine/Engine/Build/BatchFiles/RunUAT.bat ^
           BuildCookRun ^
           -Project="Game"
