@@ -92,8 +92,8 @@ jobs:
             }
 
       # Create a dummy game module to compile
-       - uses: DamianReeves/write-file-action
-         with:
+      - uses: DamianReeves/write-file-action
+        with:
           path: UnrealEngine/Game/Source/Game/Game.cpp
           write-mode: overwrite
           contents: |
@@ -107,4 +107,3 @@ jobs:
           BuildCookRun ^
           -Project="Game"
           -Config="Development"
-          
