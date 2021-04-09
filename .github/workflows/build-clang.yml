@@ -10,12 +10,14 @@ jobs:
           repository: sturcotte06/unrealengine
           ref: 4.26.1-release
           path: UnrealEngine
+          token: ${{ secrets.STURCOTTE06_TOKEN }}
 
       # Checkout the plugin          
       - uses: actions/checkout@v2
         with:
           repository: sturcotte06/flowgraph
           path: UnrealEngine/Game/Plugins/Flow
+          token: ${{ secrets.STURCOTTE06_TOKEN }}
 
       # Create a dummy unreal project to compile
       - uses: DamianReeves/write-file-action@v1.0
