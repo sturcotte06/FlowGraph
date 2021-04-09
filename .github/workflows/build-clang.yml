@@ -7,14 +7,14 @@ jobs:
       # Checkout the engine
       - uses: actions/checkout@v2
         with:
-          repository: epicgames/unrealengine
+          repository: sturcotte06/unrealengine
           ref: 4.26.1-release
           path: UnrealEngine
 
       # Checkout the plugin          
       - uses: actions/checkout@v2
         with:
-          repository: mothcocoon/flowgraph
+          repository: sturcotte06/flowgraph
           path: UnrealEngine/Game/Plugins/Flow
 
       # Create a dummy unreal project to compile
